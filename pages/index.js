@@ -1,29 +1,34 @@
+import Link from 'next/link';
 function HomePage(props) {
     const { products } = props;
+
     return (
         <>
 
             <ul>
                 {
                     products && products.map((prop) => {
-                        return <li key={prop.id} > {prop.description} </li>
+                        return <li key={prop.id}><Link href={`/${prop.id}`}> {prop.title}</Link>  </li>
                     })
                 }
-            </ul>
+            </ul >
         </>
 
     );
 }
-export async function getStaticProps(props) {
+const fs = require('fs/promises');
+const path = require('path');
+export async function getStaticProps(context) {
+    console.log('regerating ..... ')
+    const filepath = path.join(process.cwd(), 'data', 'dummy-backend.json');
+    const jsonData = await fs.readFile(filepath)
+    const data = JSON.parse(jsonData);
     return {
         props:
         {
-            'products': [
-                { "id": "1", "description": "Option 1" },
-                { "id": "2", "description": "Option 2" },
-                { "id": "3", "description": "Option 3" },
-            ]
-        }
+            'products': data.products
+        },
+        revalidate: 10
     };
 }
 export default HomePage;
