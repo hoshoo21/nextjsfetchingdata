@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 function ProductDetailPage(props) {
     const { loadedProduct } = props;
     console.log(loadedProduct);
-    if (loadedProduct !== undefined) {
+    if (loadedProduct) {
         return (
             <>
                 <h1>{loadedProduct.title}</h1>
@@ -43,7 +43,7 @@ export async function getStaticProps(context) {
 
     return {
         props: {
-            loadedProduct: product,
+            loadedProduct: ids,
         },
     };
 
@@ -52,14 +52,12 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
+
+    const data = await getData();
+    const ids = data.map(product => product.id);
+    const pathwithparams = id.map((id) => ({ params: { pid: id } }));
     return {
-        paths: [
-            { params: { pid: 'p1' } },
-            { params: { pid: 'p2' } },
-            { params: { pid: 'p3' } },
-
-
-        ],
+        paths: pathwithparams,
         fallback: false,
     };
 
